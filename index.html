@@ -5,252 +5,284 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Test Android Errors</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
+      margin: 0;
       background-color: #000000;
       color: #ffffff;
-      font-family: 'Roboto', Arial, sans-serif;
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Main Menu */
-    #menu {
-      text-align: center;
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Menu Screen */
+    #menu-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
       padding: 20px;
-      max-width: 400px;
-      width: 100%;
     }
-
-    #menu h1 {
-      font-size: 26px;
-      margin-bottom: 10px;
+    h1 {
+      font-size: 28px;
       font-weight: 500;
+      margin: 0 0 12px 0;
+      letter-spacing: 0.5px;
     }
-
     .menu-btn {
-      background-color: #1f1f1f;
+      width: 300px;
+      background-color: #212121;
       color: #ffffff;
-      border: 1px solid #3a3a3a;
+      border: 1px solid #424242;
       padding: 14px 20px;
       font-size: 16px;
       border-radius: 6px;
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: background-color 0.2s, border-color 0.2s;
     }
-
     .menu-btn:hover {
       background-color: #333333;
+      border-color: #616161;
     }
 
-    /* Error Screens */
+    /* Shared Error Screen Wrapper */
     .error-screen {
       display: none;
-      position: fixed;
-      inset: 0;
-      background-color: #000000;
-      width: 100vw;
-      height: 100vh;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      width: 100%;
+      height: 100%;
+      position: relative;
     }
 
     .back-btn {
       position: absolute;
-      top: 16px;
-      left: 16px;
-      background-color: rgba(30, 30, 30, 0.85);
-      color: #cccccc;
-      border: 1px solid #444444;
+      top: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #616161;
+      border: 1px solid #333333;
       padding: 8px 14px;
       font-size: 14px;
       border-radius: 4px;
       cursor: pointer;
-      z-index: 20;
+      z-index: 10;
     }
-
     .back-btn:hover {
-      background-color: #333333;
       color: #ffffff;
+      border-color: #757575;
     }
 
-    /* Screen 1: Error 303 (No Command) */
-    .no-command-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
+    /* Screen 1: No Command */
+    #error-303 svg {
+      width: 340px;
+      max-width: 85vw;
+      height: auto;
+      margin-bottom: 12px;
     }
-
-    .no-command-text {
-      font-size: 20px;
-      color: #e0e0e0;
-      letter-spacing: 0.5px;
-    }
-
-    /* Screen 2: Samsung Kernel Warranty Bit */
-    .warranty-text {
-      position: absolute;
-      top: 52px;
-      left: 16px;
-      color: #ffd700;
-      font-family: monospace;
-      font-size: 15px;
-      font-weight: bold;
-    }
-
-    .samsung-boot-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      width: 100%;
-      position: relative;
-    }
-
-    .samsung-logo {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: 3px;
-      margin-bottom: 10px;
-    }
-
-    .galaxy-model {
-      font-size: 22px;
+    .status-text {
+      font-size: 38px;
       font-weight: 400;
+      letter-spacing: 0.5px;
+      color: #f5f5f5;
+    }
+
+    /* Screen 2: Samsung Galaxy J56 Kernel Warranty Bit */
+    #error-samsung {
+      justify-content: space-between;
+      padding: 12px 16px 40px 16px;
+      box-sizing: border-box;
+    }
+    .kernel-warning {
+      align-self: flex-start;
+      color: #d4c84a;
+      font-family: 'Roboto', Arial, sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .samsung-center {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .samsung-brand {
+      font-family: 'Arial Black', 'Impact', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 3.5px;
+      color: #ffffff;
+      margin-bottom: 4px;
+      padding-left: 4px;
+    }
+    .galaxy-row {
+      display: flex;
+      align-items: baseline;
       gap: 6px;
     }
-
-    .galaxy-badge {
-      border: 1.5px solid #ffffff;
-      border-radius: 4px;
-      padding: 1px 6px;
-      font-size: 16px;
-    }
-
-    .powered-by {
-      position: absolute;
-      bottom: 32px;
-      font-size: 14px;
-      color: #cccccc;
-      letter-spacing: 0.5px;
-    }
-
-    .powered-by span {
-      font-weight: bold;
+    .galaxy-model {
+      font-size: 72px;
+      font-weight: 600;
+      letter-spacing: -1px;
       color: #ffffff;
+      line-height: 1;
+    }
+    .galaxy-six {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 34px;
+      height: 34px;
+      border: 5px solid #ffffff;
+      border-radius: 50%;
+      font-size: 23px;
+      font-weight: 700;
+      color: #ffffff;
+      box-sizing: border-box;
+    }
+    .powered-by {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .powered-text {
+      font-size: 16px;
+      color: #e0e0e0;
+      margin-bottom: -4px;
+      padding-left: 2px;
+    }
+    .android-wordmark {
+      font-size: 52px;
+      font-weight: 300;
+      letter-spacing: -1.5px;
+      color: #ffffff;
+      line-height: 1;
     }
   </style>
 </head>
 <body>
 
-  <!-- Main Menu -->
-  <div id="menu">
+  <!-- Menu Screen -->
+  <div id="menu-screen">
     <h1>Test Android Errors</h1>
-    <button class="menu-btn" onclick="showError('error-303')">Error 303 (No Command)</button>
-    <button class="menu-btn" onclick="showError('samsung-warranty')">Samsung Kernel Warranty Bit</button>
-    <button class="menu-btn" onclick="showError('linux-penguin')">Linux Penguin Error (Tux)</button>
+    <button class="menu-btn" onclick="showScreen('error-303')">Error 303 (No Command)</button>
+    <button class="menu-btn" onclick="showScreen('error-samsung')">Samsung Kernel Warranty Bit</button>
   </div>
 
-  <!-- Screen 1: Error 303 (No Command) -->
+  <!-- Error 1: No Command -->
   <div id="error-303" class="error-screen">
-    <button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
-    <div class="no-command-container">
-      <!-- Dead Android Robot SVG -->
-      <svg width="110" height="120" viewBox="0 0 110 120" xmlns="http://w3.org">
-        <!-- Antennas -->
-        <line x1="36" y1="24" x2="26" y2="10" stroke="#4285F4" stroke-width="3" stroke-linecap="round"/>
-        <line x1="74" y1="24" x2="84" y2="10" stroke="#4285F4" stroke-width="3" stroke-linecap="round"/>
-        <!-- Head -->
-        <path d="M 27 42 A 28 26 0 0 1 83 42 Z" fill="#4285F4"/>
-        <!-- Eyes -->
-        <circle cx="42" cy="30" r="2.8" fill="#000000"/>
-        <circle cx="68" cy="30" r="2.8" fill="#000000"/>
-        <!-- Torso (Open Chest) -->
-        <rect x="27" y="46" width="56" height="44" rx="5" fill="#4285F4"/>
-        <!-- Open Hatch Door -->
-        <polygon points="36,54 74,54 70,82 40,82" fill="#000000"/>
-        <!-- Red Exclamation Triangle -->
-        <polygon points="55,58 43,78 67,78" fill="#EA4335"/>
-        <rect x="53.7" y="64" width="2.6" height="7" fill="#000000"/>
-        <circle cx="55" cy="74.5" r="1.5" fill="#000000"/>
-        <!-- Arms -->
-        <rect x="13" y="46" width="10" height="32" rx="5" fill="#4285F4"/>
-        <rect x="87" y="46" width="10" height="32" rx="5" fill="#4285F4"/>
-        <!-- Legs -->
-        <rect x="38" y="90" width="10" height="22" rx="5" fill="#4285F4"/>
-        <rect x="62" y="90" width="10" height="22" rx="5" fill="#4285F4"/>
-      </svg>
-      <div class="no-command-text">No command</div>
-    </div>
-  </div>
+    <button class="back-btn" onclick="returnToMenu()">← Back to Menu</button>
 
-  <!-- Screen 2: Samsung Kernel Warranty Bit -->
-  <div id="samsung-warranty" class="error-screen">
-    <button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
-    <div class="warranty-text">Set Warranty Bit : kernel</div>
-    <div class="samsung-boot-container">
-      <div class="samsung-logo">SAMSUNG</div>
-      <div class="galaxy-model">Galaxy J5 <span class="galaxy-badge">6</span></div>
-      <div class="powered-by">powered by <span>android</span></div>
-    </div>
-  </div>
+    <svg viewBox="0 0 360 270" xmlns="http://w3.org">
+      <defs>
+        <linearGradient id="androidBody" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#c5e165"/>
+          <stop offset="50%" stop-color="#a4c639"/>
+          <stop offset="100%" stop-color="#68821d"/>
+        </linearGradient>
+        <linearGradient id="androidLimb" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#c5e165"/>
+          <stop offset="60%" stop-color="#98b832"/>
+          <stop offset="100%" stop-color="#5a7018"/>
+        </linearGradient>
+        <linearGradient id="hatchLid" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#78828a"/>
+          <stop offset="100%" stop-color="#373d42"/>
+        </linearGradient>
+        <linearGradient id="chestBay" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#546e7a"/>
+          <stop offset="100%" stop-color="#90a4ae"/>
+        </linearGradient>
+        <linearGradient id="redAlert" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ff4444"/>
+          <stop offset="100%" stop-color="#b71c1c"/>
+        </linearGradient>
+        <linearGradient id="yellowAlert" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ffe066"/>
+          <stop offset="55%" stop-color="#ffca28"/>
+          <stop offset="100%" stop-color="#f59f00"/>
+        </linearGradient>
+        <radialGradient id="redGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ff1744" stop-opacity="0.45"/>
+          <stop offset="100%" stop-color="#ff1744" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
 
-  <!-- Screen 3: Linux Penguin Error (Tux) -->
-  <div id="linux-penguin" class="error-screen">
-    <button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
-    <!-- Centered Tux Penguin SVG -->
-    <svg width="72" height="84" viewBox="0 0 100 115" xmlns="http://w3.org">
-      <!-- Body -->
-      <path d="M 50 10 C 33 10 27 25 27 42 C 27 55 18 70 18 85 C 18 98 32 103 50 103 C 68 103 82 98 82 85 C 82 70 73 55 73 42 C 73 25 67 10 50 10 Z" fill="#181818" stroke="#333333" stroke-width="1.5"/>
-      <!-- Flippers -->
-      <path d="M 27 45 C 15 55 10 68 14 73 C 17 76 23 68 27 60 Z" fill="#181818" stroke="#333333" stroke-width="1"/>
-      <path d="M 73 45 C 85 55 90 68 86 73 C 83 76 77 68 73 60 Z" fill="#181818" stroke="#333333" stroke-width="1"/>
-      <!-- White Belly -->
-      <ellipse cx="50" cy="70" rx="22" ry="28" fill="#ffffff"/>
-      <!-- Eyes -->
-      <ellipse cx="43" cy="24" rx="4.5" ry="6" fill="#ffffff"/>
-      <ellipse cx="57" cy="24" rx="4.5" ry="6" fill="#ffffff"/>
-      <circle cx="44" cy="24" r="2" fill="#000000"/>
-      <circle cx="56" cy="24" r="2" fill="#000000"/>
-      <!-- Beak -->
-      <path d="M 38 31 Q 50 26 62 31 Q 65 36 50 40 Q 35 36 38 31 Z" fill="#ffb800"/>
-      <path d="M 40 34 Q 50 38 60 34" fill="none" stroke="#c88a00" stroke-width="1.5"/>
-      <!-- Left Foot -->
-      <path d="M 36 92 C 25 90 14 95 16 102 C 18 108 32 108 42 103 C 45 101 43 94 36 92 Z" fill="#ffb800" stroke="#c88a00" stroke-width="1"/>
-      <!-- Right Foot -->
-      <path d="M 64 92 C 75 90 86 95 84 102 C 82 108 68 108 58 103 C 55 101 57 94 64 92 Z" fill="#ffb800" stroke="#c88a00" stroke-width="1"/>
+      <circle cx="175" cy="95" r="55" fill="url(#redGlow)"/>
+
+      <g transform="translate(15, 10)">
+        <rect x="75" y="142" width="44" height="22" rx="11" fill="url(#androidLimb)" transform="rotate(-32 75 142)"/>
+        <path d="M 98 112 L 175 68 C 185 62, 196 66, 202 76 L 228 122 C 234 132, 230 144, 220 150 L 143 194 C 133 200, 121 196, 115 186 L 89 140 C 83 130, 88 118, 98 112 Z" fill="url(#androidBody)"/>
+        <rect x="92" y="162" width="46" height="23" rx="11.5" fill="url(#androidLimb)" transform="rotate(-32 92 162)"/>
+        <polygon points="118,118 172,87 195,126 141,157" fill="url(#chestBay)" stroke="#263238" stroke-width="2"/>
+        <line x1="136" y1="108" x2="159" y2="147" stroke="#37474f" stroke-width="1.5"/>
+        <line x1="154" y1="97" x2="177" y2="136" stroke="#37474f" stroke-width="1.5"/>
+        <line x1="126" y1="131" x2="180" y2="100" stroke="#37474f" stroke-width="1.5"/>
+        <line x1="134" y1="144" x2="188" y2="113" stroke="#37474f" stroke-width="1.5"/>
+        <polygon points="118,118 172,87 156,36 102,67" fill="url(#hatchLid)" stroke="#8c969e" stroke-width="1.5"/>
+        <line x1="182" y1="64" x2="233" y2="152" stroke="#33400e" stroke-width="3"/>
+        <path d="M 185 63 C 218 46, 255 68, 259 104 C 261 124, 251 142, 235 151 Z" fill="url(#androidBody)"/>
+        <ellipse cx="222" cy="82" rx="3.5" ry="4.5" fill="#ffffff" transform="rotate(-30 222 82)"/>
+        <line x1="252" y1="92" x2="270" y2="85" stroke="#a4c639" stroke-width="4.5" stroke-linecap="round"/>
+        <rect x="172" y="168" width="56" height="22" rx="11" fill="url(#androidLimb)" transform="rotate(-32 172 168)"/>
+
+        <g transform="translate(133, 62)">
+          <path d="M 27 4 L 4 44 C 2 47, 4 50, 8 50 L 46 50 C 50 50, 52 47, 50 44 L 27 4 Z" fill="url(#redAlert)" stroke="#ff6666" stroke-width="1"/>
+          <rect x="25" y="18" width="4" height="16" rx="1.5" fill="#1a0000"/>
+          <circle cx="27" cy="40" r="2.5" fill="#1a0000"/>
+        </g>
+      </g>
+
+      <g transform="translate(205, 108)">
+        <path d="M 60 6 L 6 102 C 3 108, 7 114, 14 114 L 106 114 C 113 114, 117 108, 114 102 L 60 6 Z" fill="url(#yellowAlert)"/>
+        <rect x="55.5" y="36" width="9" height="42" rx="3" fill="#000000"/>
+        <circle cx="60" cy="93" r="5.5" fill="#000000"/>
+      </g>
     </svg>
+
+    <div class="status-text">No command</div>
+  </div>
+
+  <!-- Error 2: Samsung Galaxy J56 Kernel Warning -->
+  <div id="error-samsung" class="error-screen">
+    <button class="back-btn" onclick="returnToMenu()">← Back to Menu</button>
+
+    <div class="kernel-warning">Set Warranty Bit : kernel</div>
+
+    <div class="samsung-center">
+      <div class="samsung-brand">SAMSUNG</div>
+      <div class="galaxy-row">
+        <span class="galaxy-model">Galaxy J5</span>
+        <span class="galaxy-six">6</span>
+      </div>
+    </div>
+
+    <div class="powered-by">
+      <span class="powered-text">powered by</span>
+      <span class="android-wordmark">android</span>
+    </div>
   </div>
 
   <script>
-    function showError(screenId) {
-      document.getElementById('menu').style.display = 'none';
-      const screens = document.querySelectorAll('.error-screen');
-      screens.forEach(screen => screen.style.display = 'none');
-      document.getElementById(screenId).style.display = 'flex';
+    const menuScreen = document.getElementById("menu-screen");
+    const errorScreens = document.querySelectorAll(".error-screen");
+
+    function showScreen(screenId) {
+      menuScreen.style.display = "none";
+      errorScreens.forEach(screen => screen.style.display = "none");
+      document.getElementById(screenId).style.display = "flex";
     }
 
-    function backToMenu() {
-      const screens = document.querySelectorAll('.error-screen');
-      screens.forEach(screen => screen.style.display = 'none');
-      document.getElementById('menu').style.display = 'flex';
+    function returnToMenu() {
+      errorScreens.forEach(screen => screen.style.display = "none");
+      menuScreen.style.display = "flex";
     }
   </script>
 
